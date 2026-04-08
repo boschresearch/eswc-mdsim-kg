@@ -5,21 +5,21 @@ The datasets do not model physical MEMS behavior.
 
 ### Available Files
 ###### CSV
-- `manufacturing.csv` contains in-line manufacturing data for 2 different part types (PX1 & PX2). For each part type there are 1000 wafers simulated, each holding 25 parts
-- `manufacturing_EOL.csv` contains EOL testing data for the parts PX1 & PX2
-- `engineering.csv` contains in-line data for a new part type variant PX2V2. There are 10 wafers simulated, each holding 25 parts
-- `engineering_EOL.csv` contains EOL testing data for the part PX2V2
-- `assembly_map.csv` is a mapping table, tracking what parts are assembled into which sensor. There are 25000 units of sensor SY1 assembled. 
-- `Final_testing.csv` contains the final test results for the sensor SY1 units
+- `Datasets/manufacturing_*.csv` contains in-line manufacturing data for 2 different part types (PX1 & PX2). For each part type there are 1000 wafers simulated, each holding 25 parts
+- `Datasets/manufacturing_EOL_*.csv` contains EOL testing data for the parts PX1 & PX2
+- `Datasets/engineering.csv` contains in-line data for a new part type variant PX2V2. There are 10 wafers simulated, each holding 25 parts
+- `Datasets/engineering_EOL.csv` contains EOL testing data for the part PX2V2
+- `Datasets/assembly_map.csv` is a mapping table, tracking what parts are assembled into which sensor. There are 25000 units of sensor SY1 assembled. 
+- `Datasets/Final_testing.csv` contains the final test results for the sensor SY1 units
 ###### Images
 - `engineering_coordinates.png` resp. `manufacturing_coordinates.png` visualize wafer coordinate grids used in the simulation for engineering resp. manufacturing
-- `[name]_dag.svg` visualizes the directed acyclic graph (DAG) used for simulation of the respective part/sensor
+- `DAGs/[name]_dag.svg` visualizes the directed acyclic graph (DAG) used for simulation of the respective part/sensor
 - `mdsim_ontology.svg` graph visualization of the *mdsim* ontology modeling the simulated data, a simplified version of the *mdev* ontology
 ###### RDF
 - `mdsim_ontology.ttl` RDF definition of the *mdsim* ontology
 - `engineering_mapping_example.ttl` Example RML mapping for the engineering.cvs
-- `gridalignment.ttl` Example SHACL shapes for flagging wafers & parts with coordinates not matching the ontology standard
-- `units.ttl` Example SHACL for flagging non qudt units 
+- `SHACL/gridalignment.ttl` Example SHACL shapes for flagging wafers & parts with coordinates not matching the ontology standard
+- `SHACL/units.ttl` Example SHACL for flagging non qudt units 
 
 ## Integration conflicts 
 The following conflicts have been injected into the datasets: 
