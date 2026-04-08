@@ -1,0 +1,180 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#>.
+@prefix ql:  <http://semweb.mmlab.be/ns/ql#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix qudt:  <http://qudt.org/schema/qudt/>  .
+@prefix md: <http://example.bosch.com/mdsim/> .
+
+<#CSVSource>
+    rml:source "./engineering.csv" ;
+    rml:referenceFormulation ql:CSV ;
+.
+
+#################################################################################################################################
+<#Part>
+    rml:logicalSource <#CSVSource> ;
+
+    rr:subjectMap [
+        rr:template "http://example.bosch.com/mdsim/Part/Part-{wafer_id}-{x_pos}-{y_pos}" ;
+        rr:class md:Part ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:hasXCoordinate ;
+        rr:objectMap [
+            rml:reference "x_pos" ;
+            rr:datatype xsd:integer ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:hasYCoordinate ;
+        rr:objectMap [
+            rml:reference "y_pos" ;
+            rr:datatype xsd:integer ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:partType ;
+        rr:objectMap [
+            rml:reference "prod_name" ;
+            rr:datatype xsd:partType ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [ 
+    	rr:predicate md:fabricatedOnWafer;
+    	rr:objectMap [ 
+       		rr:parentTriplesMap <#Wafer>;
+  		]
+	] .
+    
+#################################################################################################################################
+<#Wafer>
+    rml:logicalSource <#CSVSource> ;
+
+    rr:subjectMap [
+        rr:template "http://example.bosch.com/mdsim/Wafer/Wafer-{wafer_id}" ;
+        rr:class md:Wafer ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:hasWaferId ;
+        rr:objectMap [
+            rml:reference "wafer_id" ;
+            rr:datatype xsd:string ;
+        ] ;
+    ] .
+
+#################################################################################################################################
+<#ProcessMeasurementRun>
+    rml:logicalSource <#CSVSource> ;
+
+    rr:subjectMap [
+        rr:template "http://example.bosch.com/mdsim/MeasurementRun/ProcessMeasurementRun-{parameter}-{wafer_id}-{x_pos}-{y_pos}" ;
+        rr:class md:ProcessMeasurementRun ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:hasNumericValue ;
+        rr:objectMap [
+            rml:reference "value" ;
+            rr:datatype xsd:double ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:llValid ;
+        rr:objectMap [
+            rml:reference "ll_valid" ;
+            rr:datatype xsd:boolean ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:ulValid ;
+        rr:objectMap [
+            rml:reference "ul_valid" ;
+            rr:datatype xsd:boolean ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:specStatus ;
+        rr:objectMap [
+            rml:reference "in_spec" ;
+            rr:datatype xsd:boolean ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:startTime ;
+        rr:objectMap [
+            rml:reference "param_start_ts" ;
+            rr:datatype xsd:double ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:endTime ;
+        rr:objectMap [
+            rml:reference "param_end_ts" ;
+            rr:datatype xsd:double ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [ 
+    	rr:predicate md:targetsWafer;
+    	rr:objectMap [ 
+       		rr:parentTriplesMap <#Wafer>;
+  		]
+	] ;
+
+    rr:predicateObjectMap [ 
+    	rr:predicate md:recordsParameter;
+    	rr:objectMap [ 
+       		rr:parentTriplesMap <#Parameter>;
+  		]
+	] .
+
+#################################################################################################################################
+<#Parameter>
+    rml:logicalSource <#CSVSource> ;
+
+    rr:subjectMap [
+        rr:template "http://example.bosch.com/mdsim/Parameter/Parameter-{parameter}" ;
+        rr:class md:Parameter ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:hasName ;
+        rr:objectMap [
+            rml:reference "parameter" ;
+            rr:datatype xsd:string ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:lowerLimit ;
+        rr:objectMap [
+            rml:reference "spec_ll" ;
+            rr:datatype xsd:double ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate md:upperLimit ;
+        rr:objectMap [
+            rml:reference "spec_ul" ;
+            rr:datatype xsd:double ;
+        ] ;
+    ] ;
+
+    rr:predicateObjectMap [
+        rr:predicate qudt:unit ;
+        rr:objectMap [
+            rr:template "http://qudt.org/vocab/unit/{unit}" ;
+            rr:termType rr:IRI ;
+        ] ;
+    ] .

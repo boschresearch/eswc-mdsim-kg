@@ -1,0 +1,269 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#>  .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>  .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>  .
+@prefix ssn:   <http://www.w3.org/ns/ssn/>  .
+@prefix sosa:  <http://www.w3.org/ns/sosa/>  .
+@prefix time:  <http://www.w3.org/2006/time#>  .
+@prefix qudt:  <http://qudt.org/schema/qudt/>  .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix md: <http://example.bosch.com/mdsim/> .
+
+md:Equipment 
+        rdf:type         owl:Class ;
+        rdfs:label       "Equipment" ;
+        rdfs:comment     "Represents physical tools or machines used in the fabrication process, identified by an ID." ;
+        rdfs:subClassOf  owl:Thing .
+
+md:Parameter 
+        rdf:type         owl:Class ;
+        rdfs:label       "Parameter" ;
+        rdfs:comment     "Abstract concept for measurable or controllable factors influencing process runs." ;
+        rdfs:subClassOf  owl:Thing ;
+        rdfs:subClassOf  ssn:Property .
+
+md:MeasurementRun 
+        rdf:type         owl:Class ;
+        rdfs:subClassOf  sosa:ObservationCollection ;
+        rdfs:label       "Measurement Run" ;
+        rdfs:comment     "Execution of a single fabrication step, with timestamps, values, and specification checks." ;
+        rdfs:subClassOf  owl:Thing .
+
+md:TestRun 
+        rdf:type         owl:Class ;
+        rdfs:label       "Test Run" ;
+        rdfs:comment     "Specialized process run focusing on testing, with outcomes recorded as pass/fail." ;
+        rdfs:subClassOf  md:MeasurementRun  .
+
+md:Sensor 
+        rdf:type         owl:Class ;
+        rdfs:label       "Sensor" ;
+        rdfs:comment     "A complete measuring device sold to customers, that integrates multiple MEMS parts to perform a specific function" ;
+        rdfs:subClassOf  owl:Thing .
+
+md:Wafer 
+        rdf:type         owl:Class ;
+        rdfs:label       "Wafer" ;
+        rdfs:comment     "A substrate-level entity representing a thin, circular slice of semiconductor material (typically silicon) on which MEMS structures are fabricated" ;
+        rdfs:subClassOf  owl:Thing .
+
+md:Part 
+        rdf:type         owl:Class ;
+        rdfs:label       "Part" ;
+        rdfs:comment     "A Part (sometimes called component, MEMS element, or microstructure) represents a functional or structural sub-unit of a Sensor." ;
+        rdfs:subClassOf  owl:Thing .
+
+md:ProcessRun 
+        rdf:type         owl:Class ;
+        rdfs:label       "Process Run" ;
+        rdfs:comment     "A single measurement run performed in-line during manufacturing" ;
+        rdfs:subClassOf  md:MeasurementRun  .
+
+md:PartTestRun 
+        rdf:type         owl:Class ;
+        rdfs:label       "Part Test Run" ;
+        rdfs:comment     "A test run evaluating the performance of a specific part" ;
+        rdfs:subClassOf  md:TestRun  .
+
+md:SensorTestRun 
+        rdf:type         owl:Class ;
+        rdfs:label       "Sensor Test Run" ;
+        rdfs:comment     "A test run evaluating the performance of a full sensor" ;
+        rdfs:subClassOf  md:TestRun  .
+
+md:hasEquipmentId 
+        rdf:type      owl:DatatypeProperty ;
+        rdfs:label    "has equipment id" ;
+        rdfs:comment  "Identifies a specific piece of equipment." ;
+        rdfs:range    xsd:string ;
+        rdfs:domain   md:Equipment  .
+
+md:belowUpperLimit 
+        rdf:type      owl:DatatypeProperty ;
+        rdfs:label    "below upper limit " ;
+        rdfs:comment  "Boolean flag for result of upper limit specification limit checks." ;
+        rdfs:range    xsd:boolean ;
+        rdfs:domain   md:MeasurementRun  .
+
+md:aboveLowerLimit 
+        rdf:type      owl:DatatypeProperty ;
+        rdfs:label    "above lower limit" ;
+        rdfs:comment  "Boolean flag for result of upper limit specification limit checks." ;
+        rdfs:range    xsd:boolean ;
+        rdfs:domain   md:MeasurementRun  .
+
+md:testPassed 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "test passed" ;
+        rdfs:range   xsd:boolean ;
+        rdfs:domain  md:TestRun  .
+
+md:usesEquipment 
+        rdf:type      owl:ObjectProperty ;
+        rdfs:label    "uses equipment" ;
+        rdfs:comment  "Connects a process run to the equipment used." ;
+        rdfs:range    md:Equipment  ;
+        rdfs:domain   md:MeasurementRun  .
+
+md:subsequentProcess 
+        rdf:type      owl:ObjectProperty ;
+        rdfs:label    "subsequent process" ;
+        rdfs:comment  "Defines order by linking one process run to the next." ;
+        rdfs:range    md:MeasurementRun  ;
+        rdfs:domain   md:MeasurementRun  .
+
+md:targetsPart 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "targets part" ;
+        rdfs:range   md:Part  ;
+        rdfs:domain  md:PartTestRun  .
+
+md:targetsSensor 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "targets sensor" ;
+        rdfs:range   md:Sensor  ;
+        rdfs:domain  md:SensorTestRun  .
+
+md:hasUsn 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "has usn" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Sensor  .
+
+md:hasWaferId 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "has wafer id" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Wafer  .
+
+md:sensorType 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "sensor type" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Sensor  .
+
+md:includesPart 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "includes part" ;
+        rdfs:range   md:Part  ;
+        rdfs:domain  md:Sensor  .
+
+md:hasXCoordinate 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "has x coordinate" ;
+        rdfs:range   xsd:integer ;
+        rdfs:domain  md:Part  .
+
+md:hasYCoordinate 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "has y coordinate" ;
+        rdfs:range   xsd:integer ;
+        rdfs:domain  md:Part  .
+
+md:partType 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "part type" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Part  .
+
+md:fabricatedOnWafer 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "fabricated on wafer" ;
+        rdfs:range   md:Wafer  ;
+        rdfs:domain  md:Part  .
+
+md:targetsWafer 
+        rdf:type    owl:ObjectProperty ;
+        rdfs:label  "targets wafer" .
+
+md:includesPartFromWafer 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "includes part from wafer" ;
+        rdfs:range   md:Wafer  ;
+        rdfs:domain  md:Sensor  .
+
+md:hasNeighborPart 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "hasNeighborPart" ;
+        rdfs:range   md:Part  ;
+        rdfs:domain  md:Part  .
+
+md:failedForPart 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "failed for part" ;
+        rdfs:range   md:Part  ;
+        rdfs:domain  md:PartTestRun  .
+
+md:locatedAt 
+        rdf:type    owl:DatatypeProperty ;
+        rdfs:label  "locatedAt" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Equipment  .
+
+md:inSpec 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "in spec" ;
+        rdfs:range   xsd:boolean ;
+        rdfs:domain  md:MeasurementRun  .
+
+md:subsequentRun 
+        rdf:type     owl:ObjectProperty ;
+        rdfs:label   "subsequent run" ;
+        rdfs:range   md:MeasurementRun  ;
+        rdfs:domain  md:MeasurementRun  .
+
+md:hasParameterId 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "hasParameterId" ;
+        rdfs:range   xsd:string ;
+        rdfs:domain  md:Parameter  .
+
+md:allSensorTestsPassed 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "all sensor tests passed" ;
+        rdfs:range   xsd:boolean ;
+        rdfs:domain  md:Sensor  .
+
+md:allPartTestsPassed 
+        rdf:type     owl:DatatypeProperty ;
+        rdfs:label   "all part tests passed" ;
+        rdfs:range   xsd:boolean ;
+        rdfs:domain  md:Part  .
+
+md:hasSpecLowerLimit a owl:ObjectProperty ;
+        rdfs:label "has specification lower limit" ;
+        rdfs:domain md:Parameter ;
+        rdfs:range qudt:QuantityValue .
+
+md:hasSpecUpperLimit a owl:ObjectProperty ;
+        rdfs:label "has specification upper limit" ;
+        rdfs:domain md:Parameter ;
+        rdfs:range qudt:QuantityValue .
+
+md:includesMeasurement rdfs:subPropertyOf sosa:hasMember ;
+        rdfs:domain md:MeasurementRun ;
+        rdfs:range sosa:Observation .
+
+md:measuredParameter rdfs:subPropertyOf sosa:observedProperty ;
+        rdfs:domain sosa:Observation ;
+        rdfs:range md:Parameter .
+
+md:hasMeasuredValue rdfs:subPropertyOf sosa:hasResult ;
+        rdfs:domain sosa:Observation ;
+        rdfs:range qudt:QuantityValue .
+
+md:targetsPart rdfs:subPropertyOf sosa:hasFeatureOfInterest ;
+        rdfs:domain sosa:Observation ;
+        rdfs:range md:Part .
+
+md:targetsSensor rdfs:subPropertyOf sosa:hasFeatureOfInterest ;
+        rdfs:domain sosa:Observation ;
+        rdfs:range md:Sensor .
+
+md:targetsWafer rdfs:subPropertyOf sosa:hasFeatureOfInterest ;
+        rdfs:domain sosa:Observation ;
+        rdfs:range md:Wafer .
+
+md:hasTime a owl:ObjectProperty ;
+        rdfs:domain md:MeasurementRun ;
+        rdfs:range time:Interval .
